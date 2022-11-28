@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <style>
+        
+        body {
+            text-align: left;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+        }
+
+        .input-wrapper>input {
+            max-width: 20rem;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Exercício 1</h1>
+
+    <form action="" id="salvar-jogo">
+
+            <div class="input-wrapper">
+
+                <label for="nome-jogo">Nome Do Jogo:</label>
+                <input type="text" id="nome-jogo" name="nome-jogo" value="Sem nome">
+
+            </div>
+
+            <div class="input-wrapper">
+
+                <label for="produtora-jogo">Nome da produtora do jogo:</label>
+                <input type="text" id="produtora-jogo" name="produtora-jogo" value="Sem produtra">
+             
+            </div>
+
+            <div class="input-wrapper">
+            
+                <label for="ano-jogo">Ano de lançamento do jogo:</label>
+                <input type="number" name="ano-jogo" id="ano-jogo" value="2000">
+            
+            </div>
+
+            <div class="input-wrapper">
+            
+                <label for="Idade-minima">Idade mínima para jogar o jogo:</label>
+                <input type="number" name="Idade-minima" id="Idade-minima" value="0">
+        
+            </div>
+
+            <div class="input-wrapper">
+            
+                <label for="Descricao-do-jogo">Descrição do jogo</label>
+                <textarea name="Descricao-do-jogo" id="Descricao-do-jogo" cols="50" rows="20">... </textarea>
+        
+            </div>
+
+        <button type="submit">Salvar na cloud</button>
+
+    </form>
+
+    <script>
+
+        $("#form-salvar-jogo").validate({
+
+            rules: {
+
+                "nome-jogo": {
+                    required: true
+                },
+
+                "produtora-jogo": {
+                    required: true
+                },
+
+                "Idade-minima": {
+                    required: true, range: [1, 100]
+                },
+
+                "Descricao-do-jogo": {
+                    required: false
+                },
+
+                "ano-jogo": {
+                    required: true, range: [1958, new Date().getFullYear()]
+                },
+
+            },
+            submitHandler: function (form) { enviarJogo() }
+
+        })
+
+
+        async function enviarJogo() {
+
+            const nome = $("#nome-jogo").prop("value")
+            const nomeProdutora = $("#produtora-jogo").prop("value")
+            const descricao = $("#Descricao-do-jogo").prop("value")
+            const ano = Number.parseInt($("#ano-jogo").prop("value"))
+            const idadeMinima = Number.parseInt($("#Idade-minima").prop("value"))
+
+            let jogo = {
+                "nome": nomeJogo, "produtora": nomeProdutora, "descricao": descricaoJogo, "ano": anoJogo, 
+                "idadeMinima": idadeMinima
+            }
+
+
+            try {
+
+                let opcoes = {
+
+                    method: "POST", body: JSON.stringify(Jogos),
+                    
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+
+                };
+
+                let resposta = await fetch("https://academico.espm.br/testeapi/jogo/criar", opcoes);
+
+                if (!resposta.ok) {
+
+                    alert("Erro salvando jogo.");
+
+                } else {
+
+                    alert("Jogo salvo na cloud!");
+
+                }
+            } catch (excecao) {
+
+                alert("Erro: " + excecao.message);
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+
