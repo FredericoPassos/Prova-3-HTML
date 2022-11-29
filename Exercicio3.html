@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+	<style>
+
+		body {
+			text-align: left;
+			display: flex;
+			flex-direction: column;
+			align-items: left;
+		}
+
+		.input-wrapper {
+			display: flex;
+			flex-direction: column;
+			padding: 2rem;
+		}
+
+		.min-pont {
+			width: fit-content;
+		}
+
+		.calculator {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	
+    </style>
+
+</head>
+
+<body>
+	
+    <h1>Exercício 3</h1>
+
+	<form id="calculator" class="calculator">
+
+		<div class="input-wrapper min-pont">
+
+			<label for="min-pont">
+				<h2>Pontuação mínima</h2>
+			</label>
+			<input type="number" id="min-pont" name="min-pont">
+
+		</div>
+
+		<h2>participantes</h2>
+
+		<div id="result"></div>
+		<div class="participantes" id="participantes">
+		</div>
+		<div>
+			<button type="submit">calcular</button>
+		</div>
+	
+    </form>
+
+	<script>
+	
+        const qntpart = 8
+
+		const compform = document.querySelector("#participantes")
+
+		    for (let i = 1; i <= qntpart; i++) {
+			    compform.innerHTML += `
+
+             <div class="input-wrapper">
+                  <h3>Competidor ${i}</h3>
+                   <label for="compnota1${i}">Nota prova 1:</label>
+        	    	<input type="number" name="compnota1${i}" id="compnota1${i}">
+        		     <label for="compnota2${i}">Nota prova 2:</label>
+        		      <input type="number" name="compnota2${i}" id="compnota2${i}">
+    		</div>`
+		}
+
+		let rules = {
+			"min-pont": {
+				required: true, min: 1
+			}
+		}
+
+		for (let i = 1; i <= qntpart; i++) {
+			rules[`compnota1${i}`] = {
+				required: true, min: 0
+			}
+
+			rules[`compnota2${i}`] = {
+				required: true, min: 0
+			}
+		}
+
+		$("#calculator").validate({
+			rules: rules,
+			submitHandler: function (form) {
+				calcuresult()
+			}
+		})
+
+		function calcuresult() {
+			const pontuacaoMin = Number.parseInt($("#min-pont").prop("valor"))
+			let countPassou = 0
+			    for (let i = 1; i <= qntpart; i++) {
+				    let nota1 = Number.parseInt($(`#compnota1${i}`).prop("valor"))
+				    let nota2 = Number.parseInt($(`#compnota2${i}`).prop("valor"))
+
+				    if ((nota1 + nota2) >= pontuacaoMin) {
+					countPassou++
+				    }
+			    }
+			document.querySelector("#result").innerHTML = `De ${qntpart} passaram ${countPassou} participantes`
+		}
+	
+    </script>
+
+</body>
+
+</html>
